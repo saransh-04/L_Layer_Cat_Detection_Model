@@ -1,25 +1,31 @@
 from models.parameters_file import *
 from models.forward_prop import *
-from models.cost_function import *
-from models.backward_prop import *
+from models.regularization_cost import *
+from models.regularization_back_prop import *
 
 
-# L Layer Model
-def L_layer_model(X, Y, layers_dims, learning_rate, num_iterations, print_cost=False):
+# L Layer Model Regularization
+def L_layer_model_regularization(X, Y, layers_dims, learning_rate, lambd, num_iterations, print_cost=False):
+
     np.random.seed(1)
-    costs = []  # keep track of cost
+    costs = []
 
+    # Initialize the parameters
     parameters = initialize_parameters(layers_dims)
 
     # Loop (gradient descent)
-    for i in range(0, num_iterations):
-
+    for i in range(num_iterations):
+        # Forward Propagation
         AL, caches = L_model_forward(X, parameters)
 
-        cost = compute_cost(AL, Y)
+        # Compute Cost
+        cost = compute_cost_regularization(AL, Y, parameters, lambd)
+        costs.append(cost)
 
-        grads = L_model_backward(AL, Y, caches)
+        # Back Propagation
+        grads = L_model_backward_regularization(AL, Y, caches, lambd)
 
+        # Update Parameters
         parameters = update_parameters(parameters, grads, learning_rate)
 
         # Print the cost every 100 iterations

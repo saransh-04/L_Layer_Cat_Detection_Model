@@ -1,5 +1,6 @@
 from models.load_data import *
 from models.model import *
+from models.model_regularization import *
 from models.plot_file import *
 from models.predict import *
 
@@ -44,18 +45,38 @@ print("test_x's shape: " + str(test_x.shape))
 print("\n\n")
 
 # L Layer Model Excecution
-
 ### CONSTANTS ###
 layers_dims = [12288, 20, 7, 5, 1]  # 4-layer model
-learning_rate = 0.01
-num_iterations = 3000
 
-parameters, costs = L_layer_model(train_x, train_y, layers_dims, learning_rate, num_iterations, print_cost=True)
-# y_cap is the predicted value from the model.
-# We don't need the parameters output but, in case we need, it is present!!
+# Cost without Regularization
+print("Cost without Regularization")
+parameters, costs = L_layer_model(train_x,
+                                  train_y,
+                                  layers_dims,
+                                  learning_rate=0.01,
+                                  num_iterations=3000,
+                                  print_cost=True)
 
 # Plot of cost vs iterations
-plot_costs(costs, learning_rate)
+plot_costs(costs, learning_rate=0.01)
+
+# print("Training Predict Error")
+pred_train = predict(train_x, train_y, parameters)
+
+# print("Test Predict Error")
+pred_test = predict(test_x, test_y, parameters)
+
+# Cost with Regularization
+print("Cost with Regularization")
+parameters, costs = L_layer_model_regularization(train_x, train_y,
+                                                 layers_dims,
+                                                 learning_rate=0.01,
+                                                 lambd=0.0075,
+                                                 num_iterations=1000,
+                                                 print_cost=True)
+
+# Plot of cost vs iterations
+plot_costs(costs, learning_rate=0.01)
 
 print("Training Predict Error")
 pred_train = predict(train_x, train_y, parameters)

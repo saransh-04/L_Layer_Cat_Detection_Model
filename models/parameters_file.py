@@ -1,18 +1,33 @@
 import numpy as np
 
+np.random.seed(1)
+
 
 # Initializing Parameters
-def initialize_parameters(layer_dims):
-    np.random.seed(1)
+def initialize_parameters(layers_dims):
     parameters = {}
-    L = len(layer_dims)
+    L = len(layers_dims)
 
     for l in range(1, L):
-        parameters["W" + str(l)] = np.random.randn(layer_dims[l], layer_dims[l - 1]) / np.sqrt(layer_dims[l - 1])
-        parameters["b" + str(l)] = np.zeros((layer_dims[l], 1))
+        parameters["W" + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - 1]) / np.sqrt(layers_dims[l - 1])
+        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
 
-        assert (parameters['W' + str(l)].shape == (layer_dims[l], layer_dims[l - 1]))
-        assert (parameters['b' + str(l)].shape == (layer_dims[l], 1))
+        assert (parameters['W' + str(l)].shape == (layers_dims[l], layers_dims[l - 1]))
+        assert (parameters['b' + str(l)].shape == (layers_dims[l], 1))
+
+    return parameters
+
+
+# HE initialization
+def initialize_parameters_he(layers_dims):
+    parameters = {}
+    L = len(layers_dims)
+
+    for l in range(1, L):
+
+        parameters["W" + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(2 / layers_dims[l - 1])
+        # * np.sqrt(2 / layer_dims[l - 1]) or * 0.01
+        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
 
     return parameters
 
